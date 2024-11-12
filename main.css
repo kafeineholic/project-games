@@ -118,6 +118,10 @@ span{
     color: #F9EBC2;
     padding: 0px 10px;
 }
-.btn1 i:hover{
-    color: #000000;
+.btn1 i:hover {
+    color: #AA463A;
+}
+
+.btn1:hover i {
+    color: #AA463A;
 }
