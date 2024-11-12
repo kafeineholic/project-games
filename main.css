@@ -121,3 +121,7 @@ span{
 .btn1 i:hover{
     color: #AA463A;
 }
+
+.btn1:hover i {
+    color: #AA463A;
+}
