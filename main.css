@@ -112,6 +112,7 @@ span{
 .btn1 a:hover{
     background: #F9EBC2;
     color: #AA463A;
+    font-weight: bolder;
 }
 .btn1 i{
     color: #F9EBC2;
