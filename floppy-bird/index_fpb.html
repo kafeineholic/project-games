@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floppy Bird</title>
     <link rel="stylesheet" href="style.css">
-    <audio autoplay loop>
-        <source src="/audio/floppy.mp3" type="audio/mpeg">
+    <audio id="gameAudio" loop muted>
+        <source src="./audio/floppy.mp3" type="audio/mpeg">
     </audio>
+    <script>
+        document.addEventListener('click', () => {
+        const audio = document.getElementById('gameAudio');
+        audio.muted = false;
+        audio.play().catch(error => console.log("Audio play error:", error));
+    });
+    </script>
 </head>
 
 <body>
