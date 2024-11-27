@@ -30,7 +30,15 @@
   </div>
 
   <script>
-   
+    const playerTurn = new Audio('./audio/player.mp3');
+    const botTurn = new Audio('./audio/bot.mp3')
+    const winSound = new Audio('./audio/win.mp3')
+    const drawSound = new Audio('./audio/draw.mp3')
+    const loseSound = new Audio('./audio/lose.mp3')
+    const ost = new Audio('./audio/bg.mp3')
+
+  
+
     const board = Array(9).fill(null);
     let currentPlayer = 'X';
     const boardElement = document.getElementById("board");
@@ -63,10 +71,15 @@
     function makeMove(index) {
       if (board[index] || checkWinner()) return; 
 
+      ost.play();
+      ost.loop = true;
+      
+
       board[index] = currentPlayer;
       const cell = boardElement.children[index];
       cell.textContent = currentPlayer;
 
+      playerTurn.play()
       
       if (currentPlayer === 'X') {
         cell.style.color = playerColor; 
@@ -75,8 +88,11 @@
       }
 
       if (checkWinner()) {
+        winSound.play();
         updateMessage(`Player ${currentPlayer} wins!`);
+        
       } else if (board.every(cell => cell)) {
+        drawSound.play();
         updateMessage("It's a draw!");
       } else {
         currentPlayer = 'O'; 
@@ -89,7 +105,8 @@
     function botMove() {
       if (checkWinner()) return;
 
-      
+      botTurn.play();
+
       const emptyCells = board.map((val, idx) => val === null ? idx : null).filter(idx => idx !== null);
       const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
 
@@ -102,8 +119,10 @@
 
       if (checkWinner()) {
         updateMessage(`Bot wins!`); 
+        loseSound.play();
       } else if (board.every(cell => cell)) {
         updateMessage("It's a draw!");
+        drawSound.play();
       } else {
         currentPlayer = 'X'; 
         updateMessage(`Player ${currentPlayer}'s turn`);
