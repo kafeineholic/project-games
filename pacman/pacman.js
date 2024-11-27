@@ -92,6 +92,12 @@ document.getElementById("play").addEventListener("click", function game() {
     let pacmanCurrentIndex = 518;
     squares[pacmanCurrentIndex].classList.add("pac-man");
 
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Space') {
+            event.preventDefault();  // This prevents the default scrolling behavior
+        }
+    });
+    
     // Move Pac-Man
     function movePacman(e) {
         squares[pacmanCurrentIndex].classList.remove("pac-man");
