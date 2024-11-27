@@ -213,7 +213,7 @@ document.getElementById("play").addEventListener("click", function game() {
     document.querySelector(".grid").addEventListener("touchstart", startTouch, false);
     document.querySelector(".grid").addEventListener("touchmove", moveTouch, false);
 
-
+const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
 
     // When Pac-Man eats a Pac-Dot
     function pacDotEaten() {
@@ -221,9 +221,14 @@ document.getElementById("play").addEventListener("click", function game() {
             score++;
             toWin++;
             squares[pacmanCurrentIndex].classList.remove("pac-dot");
+
+            pacDotEatenSound.currentTime = 0
+            pacDotEatenSound.play();
         }
         scoreDisplay.innerHTML = score;
     }
+
+    const powerPelletEatenSound = new Audio('./audio/powerPelletEaten.mp3')
 
     // When Pac-Man eats a Power-Pellet
     function powerPelletEaten() {
@@ -233,6 +238,9 @@ document.getElementById("play").addEventListener("click", function game() {
             ghosts.forEach(ghost => ghost.isScared = true);
             setTimeout(unScareGhosts, 7000);
             squares[pacmanCurrentIndex].classList.remove("power-pellet");
+
+            powerPelletEatenSound.currentTime = 0
+            powerPelletEatenSound.play();
         }
         scoreDisplay.innerHTML = score;
     }
