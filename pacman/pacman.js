@@ -2,7 +2,13 @@ let restartButton = document.createElement("button");
 let score = 0;
 let toWin = 0;
 
+const credit = new Audio("./audio/credit.mp3")
+const start = new Audio('./audio/start.mp3')
+
 document.getElementById("play").addEventListener("click", function game() {
+    credit.play();
+    start.play();
+
     const scoreDisplay = document.getElementById("score");
     const width = 28; // 28*28 = 784 squares
     const grid = document.querySelector(".grid")
@@ -213,7 +219,7 @@ document.getElementById("play").addEventListener("click", function game() {
     document.querySelector(".grid").addEventListener("touchstart", startTouch, false);
     document.querySelector(".grid").addEventListener("touchmove", moveTouch, false);
 
-const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
+    const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
 
     // When Pac-Man eats a Pac-Dot
     function pacDotEaten() {
@@ -229,6 +235,7 @@ const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
     }
 
     const powerPelletEatenSound = new Audio('./audio/powerPelletEaten.mp3')
+    const scaredGhostSound = new Audio('./audio/ghostChanged.mp3')
 
     // When Pac-Man eats a Power-Pellet
     function powerPelletEaten() {
@@ -241,6 +248,9 @@ const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
 
             powerPelletEatenSound.currentTime = 0
             powerPelletEatenSound.play();
+
+            scaredGhostSound.currentTime = 0
+            scaredGhostSound.play();
         }
         scoreDisplay.innerHTML = score;
     }
@@ -278,6 +288,8 @@ const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
     // Move the ghosts 
     ghosts.forEach(ghost => moveGhost(ghost));
 
+    const ghostEaten = new Audio('./audio/ghostEaten.mp3')
+
     function moveGhost(ghost) {
         const directions = [-1, +1, width, -width];
         let direction = directions[Math.floor(Math.random() * directions.length)];
@@ -310,12 +322,17 @@ const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
                 score += 100;
                 scoreDisplay.innerHTML = score;
                 squares[ghost.currentIndex].classList.add(ghost.className, "ghost");
+
+                ghostEaten.play()
             }
 
             checkForGameOver();
 
         }, ghost.speed)
     }
+
+    const idle = new Audio('./audio/idle.mp3')
+    const loseSound = new Audio('./audio/fail.mp3')
 
     // Check for Game Over
     function checkForGameOver() {
@@ -324,22 +341,37 @@ const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
             document.removeEventListener("keydown", movePacman);
             bestScoreCount();
             scoreDisplay.innerHTML = score;
+            loseSound.play();
+            loseSound.onended = () => {
+                idle.play();
+                idle.loop = true;
+            }
             let gameOver = document.createElement("div");
             gameOver.classList.add("gameOver");
             document.body.append(gameOver);
             restartButton.classList.add("restart");
             document.body.append(restartButton);
             document.getElementById("play").removeEventListener("click", game);
-            restartButton.addEventListener("click", () => { window.location.reload(false) })
+            restartButton.addEventListener("click", () => { 
+                idle.pause();
+                idle.currentTime = 0;
+                idle.loop = false;
+                window.location.reload(false) })
         }
     }
 
+    winner = new Audio('./audio/win.mp3')
     // Check for Win
     function checkForWin() {
         if (toWin === 372) {
             ghosts.forEach(ghost => clearInterval(ghost.timerId));
             document.removeEventListener("keydown", movePacman);
             bestScoreCount();
+            winner.play()
+            winner.onended = () => {
+                idle.loop = true;
+                idle.play();
+            }
             scoreDisplay.innerHTML = score;
             let youWon = document.createElement("div");
             youWon.classList.add("won");
@@ -347,7 +379,11 @@ const pacDotEatenSound = new Audio('./audio/pacDotEaten.mp3')
             restartButton.classList.add("restart");
             document.body.append(restartButton);
             document.getElementById("play").removeEventListener("click", game);
-            restartButton.addEventListener("click", () => { window.location.reload(false) })
+            restartButton.addEventListener("click", () => { 
+                idle.pause();
+                idle.currentTime = 0;
+                idle.loop = false;
+                window.location.reload(false) })
         }
     }
 }) 
