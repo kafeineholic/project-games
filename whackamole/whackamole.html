@@ -260,7 +260,11 @@
             }
         }
 
+        const bgMusic = new Audio('./audio/ost.mp3')
+            bgMusic.loop = true;
+
         function startGame() {
+            bgMusic.play();
             moleInterval = setInterval(showRandomMole, 1200); // Show mole every 1.2 seconds
             holes.forEach(hole => hole.addEventListener('click', handleMoleClick));
             showRandomMole();
